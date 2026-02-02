@@ -1,130 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Be My Valentine?</title>
+    <title>For My Valentine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <style>
         body {
+            margin: 0;
+            height: 100vh;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #ffeef2;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
+            background: linear-gradient(135deg, #fce4ec 0%, #ffc1cc 100%);
+            font-family: 'Poppins', sans-serif;
             overflow: hidden;
         }
 
-        #container {
-            background: white;
-            padding: 2rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        /* Floating Heart Styling */
+        .heart {
+            position: absolute;
+            color: rgba(255, 77, 109, 0.3);
+            pointer-events: none;
+            animation: float Upwards linear forwards;
+            z-index: 1;
+        }
+
+        @keyframes floatUpwards {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        #card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            border: 4px solid #ff4d6d;
+            text-align: center;
             z-index: 10;
+            max-width: 400px;
+            backdrop-filter: blur(5px);
         }
 
         h1 {
+            font-family: 'Pacifico', cursive;
             color: #ff4d6d;
             font-size: 2.5rem;
         }
 
-        .gif-container img {
-            width: 200px;
-            border-radius: 10px;
-        }
-
         .buttons {
-            margin-top: 20px;
             display: flex;
-            justify-content: center;
             gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
         }
 
         button {
-            padding: 12px 25px;
-            font-size: 1.2rem;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
             border: none;
-            border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.2s;
+            font-weight: 600;
+            transition: 0.3s;
         }
 
-        #yes-btn {
-            background-color: #ff4d6d;
-            color: white;
-        }
-
-        #no-btn {
-            background-color: #6c757d;
-            color: white;
-            position: relative;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        #success-message h2 {
-            color: #ff4d6d;
-            font-size: 3rem;
-        }
+        #yesBtn { background: #ff4d6d; color: white; }
+        #noBtn { background: #ffccd5; color: #ff4d6d; position: relative; }
+        
+        .hidden { display: none; }
     </style>
 </head>
 <body>
 
-    <div id="container">
-        <div id="ask-section">
-            <div class="gif-container">
-                <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZqZzR4eXh6eXh6eXh6eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/L95W4wv8nnb9V0m1ON/giphy.gif" alt="Cute bear">
-            </div>
-            <h1>Will you be my Valentine? 💖</h1>
+    <div id="card">
+        <div id="questionArea">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGZ3bmZqZzR4eXh6eXh6eXh6eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/L95W4wv8nnb9V0m1ON/giphy.gif" width="150">
+            <h1>Be my Valentine?</h1>
             <div class="buttons">
-                <button id="yes-btn">Yes!</button>
-                <button id="no-btn">No</button>
+                <button id="yesBtn">YES!</button>
+                <button id="noBtn">No</button>
             </div>
         </div>
 
-        <div id="success-message" class="hidden">
-            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2ZicGZqZzR4eXh6eXh6eXh6eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/26FLdmIp6wJr91JAI/giphy.gif" alt="Happy dance">
-            <h2>Yay! See you on the 14th! 🥰</h2>
+        <div id="happyArea" class="hidden">
+            <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2ZicGZqZzR4eXh6eXh6eXh6eXh6eXh6eXh6eXh6eXh6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/26FLdmIp6wJr91JAI/giphy.gif" width="150">
+            <h1>Yay! I love you! ❤️</h1>
         </div>
     </div>
 
     <script>
-        const yesBtn = document.getElementById('yes-btn');
-        const noBtn = document.getElementById('no-btn');
-        const askSection = document.getElementById('ask-section');
-        const successMessage = document.getElementById('success-message');
+        // Floating Hearts logic
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 5000);
+        }
+        setInterval(createHeart, 300);
 
-        // Logic to make the "No" button move away
-        const moveButton = () => {
+        // Dodge logic
+        const noBtn = document.getElementById('noBtn');
+        noBtn.addEventListener('mouseover', () => {
             const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
             const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
             noBtn.style.position = 'absolute';
-            noBtn.style.left = `${x}px`;
-            noBtn.style.top = `${y}px`;
-        };
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        });
 
-        noBtn.addEventListener('mouseover', moveButton);
-        noBtn.addEventListener('click', moveButton);
-
-        // Logic for clicking "Yes"
-        yesBtn.addEventListener('click', () => {
-            askSection.classList.add('hidden');
-            successMessage.classList.remove('hidden');
-            
-            // Launch Confetti
-            confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: ['#ff4d6d', '#ffafcc', '#ffffff']
-            });
+        // Success logic
+        document.getElementById('yesBtn').addEventListener('click', () => {
+            document.getElementById('questionArea').classList.add('hidden');
+            document.getElementById('happyArea').classList.remove('hidden');
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         });
     </script>
 </body>
